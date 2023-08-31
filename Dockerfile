@@ -1,17 +1,23 @@
-FROM node:16.3.0-alpine
-
-# Here you should set your ENV variables
-ENV TEXT="Thank you for using my template <3 -Pol"
-
+FROM node:20-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+COPY . /app
 WORKDIR /app
 
-COPY package.json .
+FROM base AS prod-deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
-RUN npm i
+FROM base AS build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm run build
 
-ADD src/ ./src
-ADD tsconfig.json ./
+FROM base
+COPY --from=prod-deps /app/node_modules /app/node_modules
+COPY --from=build /app/dist /app/dist
 
-RUN npm run tsc
+ENV TEXT="Thank you for using my template <3 -Pol"
 
-CMD [ "npm", "run", "start_lite" ]
+EXPOSE 8000
+
+CMD [ "pnpm", "start" ]
