@@ -10,10 +10,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PolPtoAmo/Typescript-Template.git"
+    "url": "git+https://github.com/polvallverdu/Typescript-Template.git"
   },
   "author": "Pol",
-  "license": "ISC",
   "dependencies": {
   },
   "devDependencies": {
