@@ -8,3 +8,6 @@ There are different npm scripts implemented:
 - `pnpm build`
 - `pnpm start`
 
+## Build
+Dockerfile is ready to build. Just run `docker build -t <your tag> .`.
+
